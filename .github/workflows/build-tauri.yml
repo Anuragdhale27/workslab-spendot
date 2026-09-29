@@ -1,0 +1,55 @@
+name: Build Spendot (Tauri — Mac + Windows)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/tauri/**"
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest]
+
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: apps/tauri
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install frontend dependencies
+        run: npm install
+
+      - name: Generate full icon set from source icon
+        run: npx tauri icon src-tauri/icons/icon.png
+
+      - name: Build Spendot (unsigned)
+        run: npx tauri build
+
+      - name: Upload macOS build
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: spendot-tauri-mac-dmg
+          path: apps/tauri/src-tauri/target/release/bundle/dmg/*.dmg
+
+      - name: Upload Windows build
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: spendot-tauri-windows-installer
+          path: apps/tauri/src-tauri/target/release/bundle/nsis/*.exe

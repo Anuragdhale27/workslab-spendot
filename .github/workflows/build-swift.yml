@@ -1,0 +1,87 @@
+name: Build Spendot (Swift, native macOS)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/swift/**"
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: apps/swift
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build release binary
+        run: swift build -c release
+
+      - name: Generate app icon (.icns) from source PNG
+        run: |
+          mkdir AppIcon.iconset
+          sips -z 16 16     icon-source.png --out AppIcon.iconset/icon_16x16.png
+          sips -z 32 32     icon-source.png --out AppIcon.iconset/icon_16x16@2x.png
+          sips -z 32 32     icon-source.png --out AppIcon.iconset/icon_32x32.png
+          sips -z 64 64     icon-source.png --out AppIcon.iconset/icon_32x32@2x.png
+          sips -z 128 128   icon-source.png --out AppIcon.iconset/icon_128x128.png
+          sips -z 256 256   icon-source.png --out AppIcon.iconset/icon_128x128@2x.png
+          sips -z 256 256   icon-source.png --out AppIcon.iconset/icon_256x256.png
+          sips -z 512 512   icon-source.png --out AppIcon.iconset/icon_256x256@2x.png
+          sips -z 512 512   icon-source.png --out AppIcon.iconset/icon_512x512.png
+          cp icon-source.png AppIcon.iconset/icon_512x512@2x.png
+          iconutil -c icns AppIcon.iconset -o AppIcon.icns
+
+      - name: Assemble Spendot.app bundle
+        run: |
+          APP=Spendot.app
+          mkdir -p "$APP/Contents/MacOS"
+          mkdir -p "$APP/Contents/Resources"
+          cp .build/release/Spendot "$APP/Contents/MacOS/Spendot"
+          cp AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
+          cat > "$APP/Contents/Info.plist" << 'EOF'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>CFBundleName</key>
+            <string>Spendot</string>
+            <key>CFBundleDisplayName</key>
+            <string>Spendot</string>
+            <key>CFBundleIdentifier</key>
+            <string>com.spendot.app</string>
+            <key>CFBundleVersion</key>
+            <string>1.0</string>
+            <key>CFBundleShortVersionString</key>
+            <string>1.0</string>
+            <key>CFBundlePackageType</key>
+            <string>APPL</string>
+            <key>CFBundleExecutable</key>
+            <string>Spendot</string>
+            <key>CFBundleIconFile</key>
+            <string>AppIcon</string>
+            <key>LSMinimumSystemVersion</key>
+            <string>13.0</string>
+            <key>LSUIElement</key>
+            <true/>
+          </dict>
+          </plist>
+          EOF
+          chmod +x "$APP/Contents/MacOS/Spendot"
+
+      - name: Create DMG
+        run: |
+          mkdir dmg-staging
+          cp -R Spendot.app dmg-staging/
+          ln -s /Applications dmg-staging/Applications
+          hdiutil create -volname "Spendot" -srcfolder dmg-staging -ov -format UDZO Spendot.dmg
+
+      - name: Upload DMG
+        uses: actions/upload-artifact@v4
+        with:
+          name: spendot-swift-mac-dmg
+          path: apps/swift/Spendot.dmg

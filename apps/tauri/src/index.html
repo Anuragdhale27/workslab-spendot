@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Spendot</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="wallpaper"></div>
+
+  <div class="fake-menubar">
+    <div class="fake-menubar-icons">
+      <span class="menubar-icon">🔊</span>
+      <span class="menubar-icon">📶</span>
+      <button id="dot" class="spendot-dot" aria-label="Open Spendot"></button>
+      <span class="menubar-clock" id="clock"></span>
+    </div>
+  </div>
+
+  <div id="popover" class="popover hidden">
+
+    <div class="popover-header">
+      <div class="title-row">
+        <span id="dot-mini" class="spendot-dot spendot-dot--sm"></span>
+        <span class="app-title">Spend Dot</span>
+      </div>
+      <button id="settings-btn" class="icon-btn" aria-label="Settings">⚙</button>
+    </div>
+
+    <span id="status-badge" class="badge">under budget</span>
+
+    <div class="total-row">
+      <span id="total" class="total">$0</span>
+      <span class="spent-label">spent</span>
+      <span class="spacer"></span>
+      <span class="of-budget">of <span id="budget-display">$60</span> daily budget</span>
+    </div>
+
+    <div class="progress-track">
+      <div id="progress-fill" class="progress-fill"></div>
+    </div>
+
+    <div class="quick-add-row" id="quick-add-row"></div>
+
+    <form id="add-form" class="add-form">
+      <input id="amount-input" type="number" step="0.01" min="0" placeholder="0.00" required />
+      <input id="label-input" type="text" placeholder="e.g. coffee" maxlength="24" />
+      <button type="submit" class="add-btn" aria-label="Add expense">→</button>
+    </form>
+    <div id="form-error" class="form-error hidden"></div>
+
+    <div class="section-label">today's expenses</div>
+    <div id="entries-list" class="entries-list"></div>
+
+    <div class="footer-row">
+      <span id="streak" class="streak"></span>
+      <span class="footer-spacer"></span>
+      <a href="#" class="history-link">7-day view →</a>
+    </div>
+
+  </div>
+
+  <div id="settings-panel" class="settings-panel hidden">
+    <div class="settings-header">
+      <span class="settings-title">Settings</span>
+      <button id="close-settings-btn" class="icon-btn" aria-label="Close settings">✕</button>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-label">Appearance</div>
+      <div class="appearance-row" id="appearance-row">
+        <button class="appearance-opt" data-mode="light">Light</button>
+        <button class="appearance-opt" data-mode="dark">Dark</button>
+        <button class="appearance-opt" data-mode="auto">Auto</button>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-label">Daily budget</div>
+      <div class="settings-input-row">
+        <span class="dollar-sign">$</span>
+        <input id="budget-input" type="number" step="1" min="1" />
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-label">Alert threshold</div>
+      <div class="settings-input-row">
+        <input id="threshold-input" type="number" step="5" min="10" max="100" />
+        <span class="unit-suffix">% of budget triggers "close to limit"</span>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <div class="settings-label">Quick add amounts</div>
+      <div class="quick-amounts-edit" id="quick-amounts-edit"></div>
+    </div>
+
+    <button id="save-settings-btn" class="save-settings-btn">save</button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
