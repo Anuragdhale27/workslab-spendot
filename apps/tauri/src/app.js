@@ -148,6 +148,12 @@ const labelInput = document.getElementById("label-input");
 const formError = document.getElementById("form-error");
 const streakEl = document.getElementById("streak");
 const clockEl = document.getElementById("clock");
+const popoverMain = document.getElementById("popover-main");
+const historyView = document.getElementById("history-view");
+const historyLink = document.getElementById("history-link");
+const historyBack = document.getElementById("history-back");
+const historyBars = document.getElementById("history-bars");
+const historySummary = document.getElementById("history-summary");
 
 const settingsBtn = document.getElementById("settings-btn");
 const closeSettingsBtn = document.getElementById("close-settings-btn");
@@ -261,6 +267,61 @@ function addEntry(amount, label) {
 }
 
 // ---------------------------------------------------------------
+// 7-DAY HISTORY VIEW
+// ---------------------------------------------------------------
+
+function renderHistory() {
+  const days = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(Date.now() - i * 86400000);
+    const key = d.toISOString().slice(0, 10);
+    const total = state.entries
+      .filter((e) => e.date === key)
+      .reduce((sum, e) => sum + e.amount, 0);
+    days.push({
+      key,
+      label: d.toLocaleDateString([], { weekday: "short" }),
+      total,
+    });
+  }
+
+  const maxVal = Math.max(state.budget, ...days.map((d) => d.total), 1);
+
+  historyBars.innerHTML = "";
+  days.forEach((day) => {
+    const level = day.total === 0 ? "empty" : statusLevel(day.total, state.budget, state.threshold);
+    const pct = Math.max(3, Math.min(100, (day.total / maxVal) * 100));
+    const col = document.createElement("div");
+    col.className = "history-bar-col";
+    col.innerHTML = `
+      <span class="history-bar-amount">${day.total > 0 ? formatMoney(day.total) : ""}</span>
+      <div class="history-bar-track">
+        <div class="history-bar-fill ${level}" style="height:${day.total > 0 ? pct : 0}%"></div>
+      </div>
+      <span class="history-bar-day">${day.label}</span>
+    `;
+    historyBars.appendChild(col);
+  });
+
+  const daysUnderBudget = days.filter((d) => d.total > 0 && d.total <= state.budget).length;
+  const activeDays = days.filter((d) => d.total > 0).length;
+  historySummary.textContent = activeDays > 0
+    ? `${daysUnderBudget} of last ${activeDays} active days under budget`
+    : "no spending logged in the last 7 days";
+}
+
+function openHistory() {
+  popoverMain.classList.add("hidden");
+  historyView.classList.remove("hidden");
+  renderHistory();
+}
+
+function closeHistory() {
+  historyView.classList.add("hidden");
+  popoverMain.classList.remove("hidden");
+}
+
+// ---------------------------------------------------------------
 // EVENTS
 // ---------------------------------------------------------------
 
@@ -268,9 +329,20 @@ dot.addEventListener("click", () => {
   popover.classList.toggle("hidden");
   settingsPanel.classList.add("hidden");
   if (!popover.classList.contains("hidden")) {
+    closeHistory();
     updateStreak();
     render();
   }
+});
+
+historyLink.addEventListener("click", (evt) => {
+  evt.preventDefault();
+  openHistory();
+});
+
+historyBack.addEventListener("click", (evt) => {
+  evt.preventDefault();
+  closeHistory();
 });
 
 addForm.addEventListener("submit", (evt) => {

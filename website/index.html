@@ -3,22 +3,84 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Spendot — your daily spending, right in your menu bar</title>
-<meta name="description" content="Spendot is a single glanceable dot that lives in your menu bar and tells you at a glance whether you're under, close to, or over your daily budget." />
+
+<title>Spendot — the daily budget dot for your Mac & Windows menu bar | $4.99</title>
+<meta name="description" content="Spendot is a single glanceable dot in your menu bar that turns green, amber, or red based on today's spending. No bank linking, no subscription, no account. $4.99 once, yours forever." />
+<link rel="canonical" href="https://spendot.workslab.in/" />
+
+<!-- favicons -->
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+
+<!-- Open Graph / social -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Spendot — the daily budget dot for your menu bar" />
+<meta property="og:description" content="A single dot in your menu bar that turns green, amber, or red based on today's spending. $4.99, one time, no subscription." />
+<meta property="og:image" content="https://spendot.workslab.in/assets/coming-soon.png" />
+<meta property="og:url" content="https://spendot.workslab.in/" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Spendot — the daily budget dot for your menu bar" />
+<meta name="twitter:description" content="Green, amber, or red — know your daily spend at a glance. $4.99, one time." />
+<meta name="twitter:image" content="https://spendot.workslab.in/assets/coming-soon.png" />
+
 <link rel="stylesheet" href="style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Spendot",
+  "operatingSystem": "macOS, Windows",
+  "applicationCategory": "FinanceApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "4.99",
+    "priceCurrency": "USD"
+  },
+  "description": "A single glanceable dot in your menu bar that shows whether you're under, close to, or over your daily budget."
+}
+</script>
 </head>
 <body>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <a href="#top" class="brand">
+      <img src="assets/logo.png" alt="Spendot logo" class="brand-logo" />
+      <span>Spendot</span>
+    </a>
+
+    <button id="nav-toggle" class="nav-toggle" aria-label="Toggle menu">☰</button>
+
+    <nav id="nav-links" class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#coming-soon">Coming soon</a>
+      <a href="#faq">FAQ</a>
+      <a href="#pricing">Pricing</a>
+      <button id="theme-toggle" class="theme-toggle" aria-label="Toggle light and dark mode">🌙</button>
+      <a class="nav-cta" href="https://rzp.io/rzp/esmOUifo">Buy — $4.99</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
 
   <!-- ============ LIVE DEMO HERO ============ -->
   <section class="hero">
     <div class="hero-copy">
       <span class="eyebrow">try it right now — this is the real app</span>
-      <h1>Your daily spending,<br />right in your menu bar.</h1>
-      <p class="hero-sub">Click the dot in the bar below. Add an expense. Watch it change color. That's the whole app.</p>
+      <h1>Stop wondering what you spent today.<br />One dot tells you.</h1>
+      <p class="hero-sub">Green means you're fine. Amber means slow down. Red means stop. That's the whole idea — try it below, it's live.</p>
+      <div class="hero-ctas">
+        <a class="buy-btn buy-btn-primary" href="https://rzp.io/rzp/esmOUifo">Get Spendot — $4.99</a>
+        <a class="buy-btn buy-btn-ghost" href="#features">See how it works ↓</a>
+      </div>
     </div>
 
     <div class="demo-frame-wrap">
       <iframe
+        id="demo-frame"
         class="demo-frame"
         src="demo/index.html"
         title="Live interactive Spendot demo"
@@ -26,11 +88,11 @@
       </iframe>
     </div>
 
-    <p class="hero-hint">↑ this demo is pulled straight from the real Spendot source code — when the app updates, this updates too</p>
+    <p class="hero-hint">↑ pulled straight from the real Spendot source code — when the app updates, this updates too</p>
   </section>
 
   <!-- ============ FEATURES ============ -->
-  <section class="section">
+  <section id="features" class="section">
     <h2>Small app. One job. Does it well.</h2>
     <div class="features-grid">
       <div class="feature">
@@ -49,14 +111,14 @@
         <p>The color tells the whole story before you even read a number. Set your own alert threshold.</p>
       </div>
       <div class="feature">
+        <span class="feature-icon">📊</span>
+        <h3>7-day view</h3>
+        <p>See the last week at a glance and how many days you finished under budget.</p>
+      </div>
+      <div class="feature">
         <span class="feature-icon">🔥</span>
         <h3>Streaks</h3>
         <p>Stay under budget and watch your streak build — a small nudge to keep the habit going.</p>
-      </div>
-      <div class="feature">
-        <span class="feature-icon">🌓</span>
-        <h3>Light and dark</h3>
-        <p>Matches your system appearance automatically, or set it manually in settings.</p>
       </div>
       <div class="feature">
         <span class="feature-icon">🔒</span>
@@ -66,8 +128,72 @@
     </div>
   </section>
 
+  <!-- ============ COMING SOON ============ -->
+  <section id="coming-soon" class="section coming-soon-section">
+    <h2>Coming soon</h2>
+    <p class="section-sub">Spendot v1 is deliberately small. These are next on the list.</p>
+    <img
+      src="assets/coming-soon.png"
+      alt="Preview of upcoming Spendot features: global quick-add shortcut, 7-day history chart, and budget notifications"
+      class="coming-soon-image"
+      loading="lazy"
+    />
+    <div class="coming-soon-list">
+      <div class="coming-soon-item">
+        <h3>⌘⇧S global shortcut</h3>
+        <p>Add an expense from anywhere on your Mac or PC without opening the popover first.</p>
+      </div>
+      <div class="coming-soon-item">
+        <h3>Native notifications</h3>
+        <p>A gentle system alert when you cross your warning threshold or your daily budget.</p>
+      </div>
+      <div class="coming-soon-item">
+        <h3>iPhone companion</h3>
+        <p>Log an expense from your phone, synced back to your desktop dot.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section id="faq" class="section faq-section">
+    <h2>Frequently asked</h2>
+    <div class="faq-list">
+
+      <details class="faq-item">
+        <summary>What exactly does Spendot do?</summary>
+        <p>It's a single dot in your menu bar that changes color based on how much you've spent today versus your daily budget: green when you're fine, amber when you're close, red when you're over. Click it to add or remove expenses and see today's list.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Does it connect to my bank?</summary>
+        <p>No. Spendot never connects to a bank account or card. You add expenses manually — it takes about two seconds per entry, and there's nothing for a bank API to expose or charge you for.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Is my data private?</summary>
+        <p>Yes. Everything is stored locally on your own computer. Nothing is sent to a server, because there is no server — Spendot doesn't have one.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Does it work on both Mac and Windows?</summary>
+        <p>Yes, the same $4.99 purchase covers both. There's also a separate native Mac-only build in development for people who want the leanest possible version.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Is this a subscription?</summary>
+        <p>No. $4.99 once. No recurring charge, no account required.</p>
+      </details>
+
+      <details class="faq-item">
+        <summary>What if I want a refund?</summary>
+        <p>Reach out through the payment provider's support within 14 days of purchase and we'll sort it out.</p>
+      </details>
+
+    </div>
+  </section>
+
   <!-- ============ PRICING ============ -->
-  <section class="section pricing-section">
+  <section id="pricing" class="section pricing-section">
     <h2>One price. Yours forever.</h2>
     <div class="pricing-card">
       <div class="price-row">
@@ -80,16 +206,25 @@
         <li>Works on macOS and Windows</li>
       </ul>
       <div class="buy-buttons">
-        <a class="buy-btn buy-btn-primary" href="#">Buy for Mac</a>
-        <a class="buy-btn" href="#">Buy for Windows</a>
+        <a class="buy-btn buy-btn-primary" href="https://rzp.io/rzp/esmOUifo">Buy Spendot now</a>
       </div>
-      <p class="pricing-note">Checkout coming soon — buttons are placeholders until payment is connected.</p>
+      <p class="pricing-note">Secure checkout via Razorpay.</p>
     </div>
   </section>
 
-  <footer class="footer">
-    <p>Spendot — built with a single dot in mind.</p>
-  </footer>
+  <!-- ============ FINAL CTA ============ -->
+  <section class="final-cta">
+    <h2>Stop guessing what you spent today.</h2>
+    <p>One dot. One glance. $4.99, once.</p>
+    <a class="buy-btn buy-btn-primary buy-btn-large" href="https://rzp.io/rzp/esmOUifo">Get Spendot — $4.99</a>
+  </section>
 
+</main>
+
+<footer class="footer">
+  <p>Spendot — built with a single dot in mind.</p>
+</footer>
+
+<script src="app.js"></script>
 </body>
 </html>

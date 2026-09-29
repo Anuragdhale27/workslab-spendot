@@ -35,6 +35,11 @@ jobs:
           rm -rf website/demo
           mkdir -p website/demo
           cp apps/tauri/src/* website/demo/
+          # Demo-only enhancement (never touches the real app source):
+          # auto-opens the popover and reports content height to the
+          # marketing page so the embed sizes itself like a real widget
+          # instead of a fixed empty box.
+          sed -i 's#</body>#<script src="../assets/demo-enhancements.js"></script>\n</body>#' website/demo/index.html
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5

@@ -61,6 +61,13 @@ will be the first real compile. If it fails, copy the exact error from
 the Actions log back to me and I'll fix it directly; Swift compiler
 errors are usually very precise about the line and cause.
 
+## Note
+
+The Tauri version recently got a working 7-day history view. This Swift
+version doesn't have it yet — port `renderHistory()`'s logic from
+`apps/tauri/src/app.js` into `ExpenseStore.swift` / `ContentView.swift`
+when you're ready to bring the two versions back in sync.
+
 ## Comparing this to the Tauri version
 
 | | Swift (this) | Tauri |

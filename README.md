@@ -1,7 +1,28 @@
 # Spendot — monorepo
 
 Everything in one place: two app builds and the marketing website with a
-live, always-current demo.
+live, always-current demo. Already live at spendot.workslab.in
+(repo: `Anuragdhale27/workslab-spendot`) — this version adds the fixes and
+new sections requested: a properly-sized live demo, a working 7-day view,
+a real nav with logo/favicon, FAQ, coming-soon section, light/dark toggle,
+SEO files, and the real Razorpay payment link wired into every buy button.
+
+## Applying this update to your existing repo
+
+Since the repo already exists and is already deployed, just replace the
+contents with this version and push:
+
+```
+# from inside your existing local clone of workslab-spendot
+rm -rf apps website .github README.md
+# copy in the new apps/, website/, .github/, README.md from this zip
+git add .
+git commit -m "v1.1: fix demo sizing, add 7-day view, FAQ, SEO, payment link"
+git push
+```
+
+Both `build-tauri.yml`/`build-swift.yml` and `deploy-website.yml` will run
+automatically, and spendot.workslab.in updates within a couple of minutes.
 
 ```
 spendot/
