@@ -73,6 +73,11 @@ struct ContentView: View {
                         .foregroundStyle(.secondary)
                 }
                 Spacer()
+                Button("Quit") { NSApplication.shared.terminate(nil) }
+                    .buttonStyle(.plain)
+                    .font(.system(size: 12))
+                    .foregroundStyle(.secondary)
+                    .keyboardShortcut("q")
             }
             .padding(.top, 4)
         }
@@ -144,11 +149,12 @@ struct ContentView: View {
             }
             .textFieldStyle(.roundedBorder)
 
-            if showError {
-                Text("enter an amount first")
-                    .font(.system(size: 11))
-                    .foregroundStyle(.red)
-            }
+            // Always laid out (just hidden) so the popover height never changes
+            // and pushes the expenses list out of view.
+            Text("enter an amount first")
+                .font(.system(size: 11))
+                .foregroundStyle(.red)
+                .opacity(showError ? 1 : 0)
         }
     }
 
