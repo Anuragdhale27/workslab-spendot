@@ -27,7 +27,11 @@ final class ExpenseStore: ObservableObject {
 
     private func save() {
         guard let data = try? JSONEncoder().encode(state) else { return }
-        try? data.write(to: fileURL, options: .atomic)
+        // Recreate the folder each time: it may have been deleted while running.
+        try? FileManager.default.createDirectory(
+            at: fileURL.deletingLastPathComponent(), withIntermediateDirectories: true)
+        do { try data.write(to: fileURL, options: .atomic) }
+        catch { NSLog("Spendot: save failed: \(error)") }
     }
 
     // ---------------- derived values ----------------
