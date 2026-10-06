@@ -133,9 +133,9 @@ struct ContentView: View {
             HStack(spacing: 8) {
                 TextField("0.00", text: $amountText)
                     .frame(width: 70)
-                HStack {
+                    .onSubmit(submitExpense)
                 TextField("e.g. coffee", text: $labelText)
-                }
+                    .onSubmit(submitExpense)
                 Button {
                     submitExpense()
                 } label: {
@@ -166,6 +166,7 @@ struct ContentView: View {
                     .foregroundStyle(.tertiary)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)
+                    .frame(maxHeight: .infinity, alignment: .top)
             } else {
                 ScrollView {
                     VStack(spacing: 2) {
@@ -174,9 +175,11 @@ struct ContentView: View {
                         }
                     }
                 }
-                .frame(maxHeight: 130)
             }
         }
+        // Fixed height: the menu bar window sizes itself once, so a list that
+        // grows/shrinks gets clipped or collapses to nothing.
+        .frame(height: 130, alignment: .top)
     }
 
     private func entryRow(_ entry: Expense) -> some View {
