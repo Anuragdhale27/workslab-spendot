@@ -5,11 +5,21 @@ on:
     branches: [main]
     paths:
       - "apps/swift/**"
+      - ".github/workflows/build-swift.yml"
+  pull_request:
+    paths:
+      - "apps/swift/**"
+      - ".github/workflows/build-swift.yml"
   workflow_dispatch: {}
+
+concurrency:
+  group: build-swift-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: macos-latest
+    timeout-minutes: 20
     defaults:
       run:
         working-directory: apps/swift
@@ -18,8 +28,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Cache SwiftPM build
+        uses: actions/cache@v4
+        with:
+          path: apps/swift/.build
+          key: swiftpm-${{ runner.os }}-${{ hashFiles('apps/swift/Package.swift', 'apps/swift/Sources/**') }}
+          restore-keys: swiftpm-${{ runner.os }}-
+
       - name: Build release binary
-        run: swift build -c release
+        run: swift build -c release --arch arm64 --arch x86_64
 
       - name: Generate app icon (.icns) from source PNG
         run: |
@@ -41,7 +58,7 @@ jobs:
           APP=Spendot.app
           mkdir -p "$APP/Contents/MacOS"
           mkdir -p "$APP/Contents/Resources"
-          cp .build/release/Spendot "$APP/Contents/MacOS/Spendot"
+          cp .build/apple/Products/Release/Spendot "$APP/Contents/MacOS/Spendot"
           cp AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
           cat > "$APP/Contents/Info.plist" << 'EOF'
           <?xml version="1.0" encoding="UTF-8"?>
@@ -72,6 +89,7 @@ jobs:
           </plist>
           EOF
           chmod +x "$APP/Contents/MacOS/Spendot"
+          codesign --force --deep -s - "$APP"
 
       - name: Create DMG
         run: |
@@ -85,3 +103,5 @@ jobs:
         with:
           name: spendot-swift-mac-dmg
           path: apps/swift/Spendot.dmg
+          retention-days: 14
+          if-no-files-found: error
