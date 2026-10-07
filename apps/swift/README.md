@@ -49,6 +49,16 @@ workflow**.
 - **Uninstall:** quit the app, then drag it to the Bin. If macOS says it is
   still open: `pkill -x Spendot`.
 - **Remove saved data (optional):** `rm -rf ~/Library/Application\ Support/Spendot`
+- **Reinstalling / updating:** always quit the running app first
+  (`pkill -x Spendot`). Opening the app while an old copy is still running
+  just brings the old process (and its old code) back.
+
+## Where your data lives
+
+Expenses and settings are saved to
+`~/Library/Application Support/Spendot/data.json` on every change. The
+folder is recreated if it goes missing. To find the file:
+`find ~/Library -path "*pendot*" -name data.json`
 
 ## Structure
 
