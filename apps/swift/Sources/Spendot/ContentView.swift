@@ -73,6 +73,11 @@ struct ContentView: View {
                         .foregroundStyle(.secondary)
                 }
                 Spacer()
+                Button("Quit") { NSApplication.shared.terminate(nil) }
+                    .buttonStyle(.plain)
+                    .font(.system(size: 12))
+                    .foregroundStyle(.secondary)
+                    .keyboardShortcut("q")
             }
             .padding(.top, 4)
         }
@@ -128,9 +133,9 @@ struct ContentView: View {
             HStack(spacing: 8) {
                 TextField("0.00", text: $amountText)
                     .frame(width: 70)
-                HStack {
+                    .onSubmit(submitExpense)
                 TextField("e.g. coffee", text: $labelText)
-                }
+                    .onSubmit(submitExpense)
                 Button {
                     submitExpense()
                 } label: {
@@ -144,11 +149,12 @@ struct ContentView: View {
             }
             .textFieldStyle(.roundedBorder)
 
-            if showError {
-                Text("enter an amount first")
-                    .font(.system(size: 11))
-                    .foregroundStyle(.red)
-            }
+            // Always laid out (just hidden) so the popover height never changes
+            // and pushes the expenses list out of view.
+            Text("enter an amount first")
+                .font(.system(size: 11))
+                .foregroundStyle(.red)
+                .opacity(showError ? 1 : 0)
         }
     }
 
@@ -160,6 +166,7 @@ struct ContentView: View {
                     .foregroundStyle(.tertiary)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)
+                    .frame(maxHeight: .infinity, alignment: .top)
             } else {
                 ScrollView {
                     VStack(spacing: 2) {
@@ -168,9 +175,11 @@ struct ContentView: View {
                         }
                     }
                 }
-                .frame(maxHeight: 130)
             }
         }
+        // Fixed height: the menu bar window sizes itself once, so a list that
+        // grows/shrinks gets clipped or collapses to nothing.
+        .frame(height: 130, alignment: .top)
     }
 
     private func entryRow(_ entry: Expense) -> some View {

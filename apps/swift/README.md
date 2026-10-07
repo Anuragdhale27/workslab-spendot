@@ -19,22 +19,46 @@ the Tauri project instead.
 
 ## Build it for free via GitHub Actions (no Mac needed)
 
-1. Push this folder to a new GitHub repo (same steps as the Tauri repo):
+`.github/workflows/build-swift.yml` builds a **universal** (Apple Silicon +
+Intel) binary on a macOS runner, assembles `Spendot.app`, ad-hoc signs it
+and packages `Spendot.dmg`. It runs on pushes to `main` and on pull
+requests that touch `apps/swift/**`, or manually via **Actions → Run
+workflow**.
+
+1. **Forks:** GitHub disables Actions on forks by default. Open the
+   **Actions** tab and click "I understand my workflows, go ahead and
+   enable them".
+2. Run **Build Spendot (Swift, native macOS)**.
+3. Download the `spendot-swift-mac-dmg` artifact (kept for 14 days).
+
+## Install
+
+1. Open the DMG and drag `Spendot.app` to `/Applications`.
+2. The app is ad-hoc signed but **not notarized** (that needs a paid Apple
+   Developer account), so macOS blocks the first launch. Either
+   right-click → **Open** → **Open**, or run once in Terminal:
    ```
-   git init
-   git add .
-   git commit -m "Spendot native Swift v1"
-   git branch -M main
-   git remote add origin https://github.com/YOUR-USERNAME/spendot-swift.git
-   git push -u origin main
+   xattr -cr /Applications/Spendot.app
    ```
-2. Go to the **Actions** tab — `build-mac.yml` runs automatically on a
-   real macOS GitHub runner (this one has actual Xcode installed, so
-   `swift build` compiles for real, no cross-compilation tricks needed).
-3. Download the `spendot-swift-mac-dmg` artifact when it finishes.
-4. Since it's unsigned, opening it needs the same **right-click → Open →
-   Open Anyway** step as the Tauri version, until you add the $99 Apple
-   Developer notarization step later.
+   Re-run it after every new download (the browser re-adds the quarantine flag).
+3. The dot appears in the menu bar. There is no Dock icon.
+
+## Quit / uninstall
+
+- **Quit:** click the dot, then **Quit** (or ⌘Q).
+- **Uninstall:** quit the app, then drag it to the Bin. If macOS says it is
+  still open: `pkill -x Spendot`.
+- **Remove saved data (optional):** `rm -rf ~/Library/Application\ Support/Spendot`
+- **Reinstalling / updating:** always quit the running app first
+  (`pkill -x Spendot`). Opening the app while an old copy is still running
+  just brings the old process (and its old code) back.
+
+## Where your data lives
+
+Expenses and settings are saved to
+`~/Library/Application Support/Spendot/data.json` on every change. The
+folder is recreated if it goes missing. To find the file:
+`find ~/Library -path "*pendot*" -name data.json`
 
 ## Structure
 
@@ -49,17 +73,8 @@ spendot-swift/
 │   ├── SettingsView.swift          ← budget / threshold / quick amounts
 │   ├── ExpenseStore.swift          ← persistence + all business logic
 │   └── Models.swift                ← Expense, AppState, category icon guesser
-└── .github/workflows/build-mac.yml ← builds + packages the .dmg, free runner
+└── .github/workflows/build-swift.yml ← builds + packages the .dmg, free runner
 ```
-
-## Honest caveat
-
-I wrote this Swift code carefully against Apple's real, current
-`MenuBarExtra` API, but — same as the Tauri project — I don't have a Mac
-to compile it myself before handing it to you. The GitHub Actions run
-will be the first real compile. If it fails, copy the exact error from
-the Actions log back to me and I'll fix it directly; Swift compiler
-errors are usually very precise about the line and cause.
 
 ## Note
 

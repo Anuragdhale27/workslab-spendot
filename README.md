@@ -103,6 +103,14 @@ Once you pick one, replace the two `href="#"` values in
 `website/index.html` with your real checkout links — no other code needs
 to change.
 
+## Installing the macOS build
+
+The Swift build is ad-hoc signed but not notarized, so macOS blocks the
+first launch. Right-click → **Open**, or run
+`xattr -cr /Applications/Spendot.app` once. Quit from the app's popover
+(**Quit** / ⌘Q). On a fork, enable Actions first (Actions tab → enable
+workflows). Details in `apps/swift/README.md`.
+
 ## Each app's own README
 
 - `apps/tauri/README.md` — Tauri build details, local dev, signing notes
